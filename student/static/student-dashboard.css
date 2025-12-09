@@ -1,0 +1,428 @@
+:root {
+    --bg-page: #f5f5f5;
+    --card-bg: #ffffff;
+    --accent: #086788;
+    --text-main: #222222;
+    --text-muted: #666666;
+    --border-soft: #e0e0e0;
+    --radius-lg: 18px;
+    --radius-md: 12px;
+    --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.04);
+}
+
+body {
+    margin: 0;
+    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-page);
+    color: var(--text-main);
+}
+
+/* ===== SHELL ===== */
+
+.student-shell {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===== HEADER ===== */
+
+.app-header {
+    height: 64px;
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border-soft);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    box-shadow: var(--shadow-soft);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.menu-toggle {
+    border: none;
+    background: var(--card-bg);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 999px;
+    transition: background 0.15s ease;
+}
+
+.menu-toggle:hover {
+    background: #eef4f6;
+}
+
+.logo-img {
+    height: 28px;
+}
+
+.header-center {
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.btn-ghost {
+    border-radius: 999px;
+    border: 1px solid var(--accent);
+    background: transparent;
+    color: var(--accent);
+    padding: 6px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.btn-ghost:hover {
+    background: var(--accent);
+    color: #ffffff;
+}
+
+/* ===== LAYOUT ===== */
+
+.student-layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 24px;
+    padding: 24px 32px 32px;
+}
+
+/* ===== SIDEBAR ===== */
+
+.sidebar {
+    padding: 0.55rem 0.75rem;
+    height: fit-content;
+    margin-bottom: 0.25rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.sidebar-title {
+    font-size: 14px;
+    font-weight: 600;
+    padding: 0 20px 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #555;
+}
+
+.sidebar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.sidebar li {
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    color: #555;
+    display: flex;
+    align-items: center;
+    transition: background 0.15s ease, color 0.15s ease, padding-left 0.15s ease;
+}
+
+.sidebar li:hover {
+    background-color: #e0f0f6;
+    color: #086788;
+    padding-left: 26px;
+}
+
+.sidebar li.active {
+    background: #086788;
+    color: #ffffff;
+    font-weight: 500;
+}
+
+/* For small screens – sidebar slides */
+@media (max-width: 900px) {
+    .student-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        position: fixed;
+        left: -260px;
+        top: 64px;
+        width: 220px;
+        z-index: 25;
+        transition: left 0.2s ease;
+    }
+
+    .sidebar.open {
+        left: 16px;
+    }
+}
+
+/* ===== MAIN ===== */
+
+.student-main {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* ===== CARDS GRID (OVERVIEW) ===== */
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    padding: 18px 20px;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid #f1f1f1;
+}
+
+.card h3 {
+    margin: 0 0 10px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.big-number {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 0 0 6px;
+}
+
+.card-text {
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+/* ===== SECTIONS (Profile / Resume / Skills / Applied / Notifications) ===== */
+
+.section {
+    display: none;
+}
+
+.section.active {
+    display: block;
+}
+
+.section-card {
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    padding: 20px 22px;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid #f1f1f1;
+}
+
+.section-card h2 {
+    margin: 0 0 16px;
+    font-size: 18px;
+}
+
+.section-hint {
+    margin-top: -8px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.section-meta {
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+/* Forms */
+
+.section-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(220px, 1fr));
+    gap: 16px 18px;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 13px;
+}
+
+.form-field label {
+    font-weight: 500;
+    color: var(--text-main);
+}
+
+.form-field input,
+.form-field select {
+    border-radius: 10px;
+    border: 1px solid var(--border-soft);
+    padding: 8px 10px;
+    font-size: 14px;
+    outline: none;
+    transition: border 0.15s ease, box-shadow 0.15s ease;
+    background: #fcfcfc;
+}
+
+.form-field input:focus,
+.form-field select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(8, 103, 136, 0.12);
+}
+
+/* Buttons */
+
+.btn-primary {
+    align-self: flex-start;
+    border: none;
+    border-radius: 999px;
+    padding: 8px 22px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #ffffff;
+    background: var(--accent);
+    cursor: pointer;
+    transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.05s ease;
+}
+
+.btn-primary:hover {
+    background: #05516a;
+    box-shadow: 0 8px 18px rgba(8, 103, 136, 0.25);
+}
+
+.btn-primary:active {
+    transform: translateY(1px);
+}
+
+/* Skills */
+
+.skills-form {
+    margin-bottom: 10px;
+}
+
+.skills-input-row {
+    display: flex;
+    gap: 10px;
+}
+
+.skills-input-row input {
+    flex: 1;
+}
+
+.skills-list {
+    list-style: none;
+    margin: 8px 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.skills-list li {
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #e3f1f5;
+    color: var(--accent);
+    font-size: 12px;
+}
+
+/* Tables */
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.data-table th,
+.data-table td {
+    padding: 10px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: left;
+}
+
+.data-table thead {
+    background: #f7f7f7;
+}
+
+.data-table th {
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+/* Notifications */
+
+.notification-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.notification-list li {
+    padding: 10px 12px;
+    border-radius: var(--radius-md);
+    border: 1px solid #f1f1f1;
+    margin-bottom: 8px;
+    background: #fcfcfc;
+}
+
+.notification-list li.unread {
+    border-color: var(--accent);
+    background: #e9f4f8;
+}
+
+.notif-message {
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.notif-meta {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+/* Generic */
+
+.empty-text {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+/* Responsive cards */
+
+@media (max-width: 1000px) {
+    .cards-grid {
+        grid-template-columns: repeat(2, minmax(200px, 1fr));
+    }
+}
+
+@media (max-width: 650px) {
+    .cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}

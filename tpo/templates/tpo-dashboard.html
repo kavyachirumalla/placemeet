@@ -1,0 +1,202 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TPO Dashboard | Placemeet</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'global.css' %}">
+    <link rel="stylesheet" href="{% static 'tpo-dashboard.css' %}">
+</head>
+<body class="tpo-body">
+
+<div class="tpo-shell">
+    <!-- HEADER -->
+    <header class="app-header">
+        <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+
+        <div class="header-logo">
+            <img src="{% static 'logo2.png' %}" alt="Placemeet Logo" class="logo-img">
+        </div>
+
+        <div class="header-center">
+            <span class="welcome-text">Welcome, {{ request.user.username }}</span>
+
+        </div>
+
+        <div class="header-right">
+            
+            <button class="btn btn-ghost"
+                    onclick="window.location.href='{% url 'users:logout' %}'">
+                Logout
+            </button>
+        </div>
+    </header>
+
+    <div class="tpo-layout">
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-title">Menu</div>
+            <ul>
+                <li class="active" data-target="overview" onclick="showSection(this)">Dashboard</li>
+                <li data-target="post-job" onclick="showSection(this)">Post Job Opening</li>
+                <li data-target="students" onclick="showSection(this)">View Students</li>
+                <li data-target="manage" onclick="showSection(this)">Manage</li>
+                <li data-target="announcements" onclick="showSection(this)">Announcements</li>
+            </ul>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="tpo-main">
+
+            <!-- SECTION: OVERVIEW -->
+            <section id="overview" class="section active">
+                <div class="cards-grid">
+                    <div class="card">
+                        <h3>Total Students Registered</h3>
+                        <p class="big-number">{{ total_students }}</p>
+                        <p class="hint">Across all branches & years.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Jobs Posted</h3>
+                        <p class="big-number">{{ jobs_posted }}</p>
+                        <p class="hint">Jobs published by you.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Pending Applications</h3>
+                        <p class="big-number">{{ pending_apps }}</p>
+                        <p class="hint">Awaiting review.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Shortlisted Students</h3>
+                        <p class="big-number">{{ shortlisted }}</p>
+                        <p class="hint">Across all openings.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Companies Visited</h3>
+                        <p class="big-number">{{ companies_visited }}</p>
+                        <p class="hint">Distinct companies on campus.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Placed Students</h3>
+                        <p class="big-number">{{ placed_students }}</p>
+                        <p class="hint">Students with selected status.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: POST JOB -->
+            <section id="post-job" class="section">
+                <h2>Post Job Opening</h2>
+                <form method="post" class="form-card">
+                    {% csrf_token %}
+                    {{ job_form.non_field_errors }}
+                    <div class="form-row">
+                        <label>Job Title</label>
+                        {{ job_form.title }}
+                    </div>
+                    <div class="form-row">
+                        <label>Company</label>
+                        {{ job_form.company }}
+                    </div>
+                    <div class="form-row">
+                        <label>Location</label>
+                        {{ job_form.location }}
+                    </div>
+                    <div class="form-row">
+                        <label>Description</label>
+                        {{ job_form.description }}
+                    </div>
+                    <div class="form-row">
+                        <label>Last Date</label>
+                        {{ job_form.last_date }}
+                    </div>
+                    <button type="submit" name="post_job" class="btn btn-primary">
+                        Post Job
+                    </button>
+                </form>
+            </section>
+
+            <!-- SECTION: VIEW STUDENTS -->
+            <section id="students" class="section">
+                <h2>Registered Students</h2>
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Username</th>
+                                <th>Branch</th>
+                                <th>CGPA</th>
+                                <th>Graduation Year</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for s in students %}
+                            <tr>
+                                <td>{{ s.full_name }}</td>
+                                <td>{{ s.user.username }}</td>
+                                <td>{{ s.branch }}</td>
+                                <td>{{ s.cgpa|default:"-" }}</td>
+                                <td>{{ s.graduation_year|default:"-" }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="5" class="empty">No students yet.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- SECTION: MANAGE (simple view of applications) -->
+            <section id="manage" class="section">
+                <h2>Manage Applications</h2>
+                <p class="hint">For now this is just a placeholder. You can extend it later
+                    to change application statuses.</p>
+            </section>
+
+            <!-- SECTION: ANNOUNCEMENTS -->
+            <section id="announcements" class="section">
+                <h2>Announcements</h2>
+
+                <form method="post" class="form-card">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <label>Title</label>
+                        {{ ann_form.title }}
+                    </div>
+                    <div class="form-row">
+                        <label>Message</label>
+                        {{ ann_form.message }}
+                    </div>
+                    <div class="form-row checkbox-row">
+                        <label>{{ ann_form.is_active }} Active</label>
+                    </div>
+                    <button type="submit" name="post_announcement" class="btn btn-primary">
+                        Post Announcement
+                    </button>
+                </form>
+
+                <div class="announcement-list">
+                    {% for a in announcements %}
+                        <article class="announcement">
+                            <h3>{{ a.title }}</h3>
+                            <p class="meta">{{ a.created_at|date:"d M Y H:i" }}</p>
+                            <p>{{ a.message }}</p>
+                        </article>
+                    {% empty %}
+                        <p class="empty">No announcements yet.</p>
+                    {% endfor %}
+                </div>
+            </section>
+
+        </main>
+    </div>
+</div>
+
+<script src="{% static 'tpo.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+/* GLOBAL STYLES */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: #f5f5f5;
+    color: #222222;
+}
+
+/* Simple header with CSS "logo" */
+
+.app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 40px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* Logo: triangle + P built with borders */
+
+.logo-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-mark {
+    width: 32px;
+    height: 32px;
+    position: relative;
+}
+
+.logo-mark::before {
+    content: "";
+    position: absolute;
+    inset: 3px;
+    border: 2px solid #086788;
+    border-radius: 4px;
+    transform: skewX(-10deg);
+}
+
+.logo-mark::after {
+    content: "P";
+    position: absolute;
+    inset: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #086788;
+    font-size: 18px;
+}
+
+.logo-text-main {
+    font-weight: 700;
+    font-size: 20px;
+    color: #086788;
+}
+
+.logo-text-sub {
+    font-size: 12px;
+    color: #777777;
+}
+
+/* Generic button */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 18px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    background-color: #086788;
+    color: #ffffff;
+    transition: transform 0.15s ease, box-shadow 0.15s ease,
+        background-color 0.15s ease;
+}
+
+.btn:hover {
+    background-color: #05526a;
+    box-shadow: 0 4px 10px rgba(8, 103, 136, 0.35);
+    transform: translateY(-1px);
+}
+
+.btn-outline {
+    background-color: transparent;
+    color: #086788;
+    border: 1px solid #086788;
+}
+
+.btn-outline:hover {
+    background-color: #086788;
+    color: #ffffff;
+}
+
+/* Layout helpers */
+
+.page-container {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 32px 20px 40px;
+}
+
+.text-muted {
+    color: #777777;
+    font-size: 14px;
+}

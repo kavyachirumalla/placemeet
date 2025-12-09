@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Placemeet | Home</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'index.css' %}">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <img src="{% static 'logo2.png' %}" alt="Placemeet Logo" class="logo">
+    </header>
+
+    <!-- TAGLINE -->
+    <div class="tagline">
+        <h1>Your Campus Placement Hub</h1>
+        <p>Connecting Students, TPOs & Recruiters Seamlessly</p>
+    </div>
+
+    <!-- ROLE SELECTION CARDS -->
+<div class="role-cards">
+
+    <div class="role-card">
+        <img src="{% static 'student2.jpeg' %}" class="role-img" alt="student">
+        <h3>Continue as Student</h3>
+        <button class="role-btn" onclick="location.href='{% url 'users:login' %}'">Login</button>
+    </div>
+
+    <div class="role-card">
+        <img src="{% static 'tpo2.jpeg' %}" class="role-img" alt="tpo">
+        <h3>Continue as TPO</h3>
+        <button class="role-btn" onclick="location.href='{% url 'users:login' %}'">Login</button>
+    </div>
+
+    <div class="role-card">
+        <img src="{% static 'recruiter2.jpeg' %}" class="role-img" alt="recruiter">
+        <h3>Continue as Recruiter</h3>
+        <button class="role-btn" onclick="location.href='{% url 'users:login' %}'">Login</button>
+    </div>
+
+</div>
+    <!-- FOOTER -->
+    <footer class="footer">
+        <p>&copy; 2025 Placemeet. All rights reserved.</p>
+    </footer>
+</body>
+</html>

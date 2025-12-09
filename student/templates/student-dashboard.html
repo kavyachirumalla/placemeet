@@ -1,0 +1,266 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Dashboard | Placemeet</title>
+
+    <!-- Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'global.css' %}">
+    <link rel="stylesheet" href="{% static 'student-dashboard.css' %}">
+</head>
+<body>
+<div class="student-shell">
+
+    <!-- HEADER -->
+    <header class="app-header">
+        <div class="header-left">
+            <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+            <img src="{% static 'logo2.png' %}" alt="Placemeet" class="logo-img">
+        </div>
+        <div class="header-center">
+            Welcome, {{ request.user.username }}
+        </div>
+        <div class="header-right">
+            <button class="btn-ghost"
+                    onclick="window.location.href='{% url 'users:logout' %}'">
+                Logout
+            </button>
+        </div>
+    </header>
+
+    <div class="student-layout">
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-title">Menu</div>
+            <ul>
+                <li class="active" data-target="overview" onclick="showSection(this)">Dashboard</li>
+                <li data-target="profile" onclick="showSection(this)">Profile</li>
+                <li data-target="resume" onclick="showSection(this)">Upload Resume</li>
+                <li data-target="skills" onclick="showSection(this)">My Skills</li>
+                <li data-target="applied" onclick="showSection(this)">Applied Jobs</li>
+                <li data-target="notifications" onclick="showSection(this)">Notifications</li>
+            </ul>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="student-main">
+
+            <!-- ===== OVERVIEW CARDS ===== -->
+            <section id="overview" class="section active">
+                <div class="cards-grid">
+                    <!-- Profile completion -->
+                    <div class="card">
+                        <h3>Profile Completion</h3>
+                        <p class="big-number">{{ profile_completion }}%</p>
+                        <p class="card-text">
+                            Fill your profile to improve visibility to recruiters.
+                        </p>
+                    </div>
+
+                    <!-- Resume status -->
+                    <div class="card">
+                        <h3>Resume Status</h3>
+                        <p class="big-number">
+                            {% if profile.resume %}Uploaded{% else %}Pending{% endif %}
+                        </p>
+                        <p class="card-text">
+                            Upload your resume to start applying.
+                        </p>
+                    </div>
+
+                    <!-- Jobs applied -->
+                    <div class="card">
+                        <h3>Jobs Applied</h3>
+                        <p class="big-number">{{ applied_count }}</p>
+                        <p class="card-text">
+                            Track your applications and status.
+                        </p>
+                    </div>
+
+                    <!-- Skills summary -->
+                    <div class="card">
+                        <h3>Skills Added</h3>
+                        <p class="big-number">{{ skills|length }}</p>
+                        <p class="card-text">
+                            Showcase what you’re good at.
+                        </p>
+                    </div>
+
+                    <!-- Notifications -->
+                    <div class="card">
+                        <h3>Notifications</h3>
+                        <p class="big-number">{{ notify_count }}</p>
+                        <p class="card-text">
+                            New job alerts and updates from TPO.
+                        </p>
+                    </div>
+
+                    <!-- Open jobs -->
+                    <div class="card">
+                        <h3>Open Jobs</h3>
+                        <p class="big-number">{{ jobs|length }}</p>
+                        <p class="card-text">
+                            Latest openings posted on campus.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== PROFILE SECTION ===== -->
+            <section id="profile" class="section">
+                <div class="section-card">
+                    <h2>Profile</h2>
+                    <form method="post" class="section-form">
+                        {% csrf_token %}
+                        <div class="form-grid">
+                            <div class="form-field">
+                                <label>Full Name</label>
+                                <input type="text" name="full_name"
+                                       value="{{ profile_form.full_name.value|default_if_none:'' }}">
+                            </div>
+                            <div class="form-field">
+                                <label>Email</label>
+                                <input type="email" name="email"
+                                       value="{{ profile.user.email }}">
+                            </div>
+                            <div class="form-field">
+                                <label>Phone</label>
+                                <input type="text" name="phone"
+                                       value="{{ profile_form.phone.value|default_if_none:'' }}">
+                            </div>
+                            <div class="form-field">
+                                <label>Branch</label>
+                                <input type="text" name="branch"
+                                       value="{{ profile_form.branch.value|default_if_none:'' }}">
+                            </div>
+                            <div class="form-field">
+                                <label>CGPA</label>
+                                <input type="number" step="0.01" name="cgpa"
+                                       value="{{ profile_form.cgpa.value|default_if_none:'' }}">
+                            </div>
+                            <div class="form-field">
+                                <label>Graduation Year</label>
+                                <input type="number" name="graduation_year"
+                                       value="{{ profile_form.graduation_year.value|default_if_none:'' }}">
+                            </div>
+                        </div>
+                        <button type="submit" name="save_profile" class="btn-primary">
+                            Save Profile
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- ===== RESUME SECTION ===== -->
+            <section id="resume" class="section">
+                <div class="section-card">
+                    <h2>Upload Resume</h2>
+                    <p class="section-hint">Upload only PDF or DOCX files.</p>
+                    <form method="post" enctype="multipart/form-data" class="section-form">
+                        {% csrf_token %}
+                        <div class="form-field">
+                            <label>Resume File</label>
+                            <input type="file" name="file">
+                        </div>
+                        <button type="submit" name="upload_resume" class="btn-primary">
+                            Upload Resume
+                        </button>
+                    </form>
+                    {% if profile.resume %}
+                        <p class="section-meta">
+                            Current file:
+                            <strong>{{ profile.resume.file.name|slice:'10:' }}</strong>
+                        </p>
+                    {% endif %}
+                </div>
+            </section>
+
+            <!-- ===== SKILLS SECTION ===== -->
+            <section id="skills" class="section">
+                <div class="section-card">
+                    <h2>My Skills</h2>
+                    <form method="post" class="skills-form section-form">
+                        {% csrf_token %}
+                        <div class="skills-input-row">
+                            <input type="text" name="name" placeholder="Add a skill (e.g., Django, SQL)">
+                            <button type="submit" name="add_skill" class="btn-primary">Add</button>
+                        </div>
+                    </form>
+
+                    <ul class="skills-list">
+                        {% for skill in skills %}
+                            <li>{{ skill.name }}</li>
+                        {% empty %}
+                            <li class="empty-text">No skills added yet.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ===== APPLIED JOBS SECTION ===== -->
+            <section id="applied" class="section">
+                <div class="section-card">
+                    <h2>Applied Jobs</h2>
+                    <table class="data-table">
+                        <thead>
+                        <tr>
+                            <th>Job Title</th>
+                            <th>Company</th>
+                            <th>Applied On</th>
+                            <th>Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for app in applications %}
+                            <tr>
+                                <td>{{ app.job.title }}</td>
+                                <td>{{ app.job.company }}</td>
+                                <td>{{ app.applied_at|date:"d M Y" }}</td>
+                                <td>{{ app.status|title }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4" class="empty-text">
+                                    You haven’t applied to any jobs yet.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ===== NOTIFICATIONS SECTION ===== -->
+            <section id="notifications" class="section">
+                <div class="section-card">
+                    <h2>Notifications</h2>
+                    <ul class="notification-list">
+                        {% for n in notifications %}
+                            <li class="{% if not n.is_read %}unread{% endif %}">
+                                <div class="notif-message">{{ n.message }}</div>
+                                <div class="notif-meta">
+                                    {{ n.created_at|date:"d M Y, H:i" }}
+                                </div>
+                            </li>
+                        {% empty %}
+                            <li class="empty-text">No notifications yet.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </section>
+
+        </main>
+    </div>
+</div>
+
+<!-- Very small JS just for sidebar + section switching -->
+<script src="{% static 'student-dashboard.js' %}"></script>
+</body>
+</html>
